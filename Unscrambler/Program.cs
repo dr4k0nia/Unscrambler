@@ -15,8 +15,9 @@ namespace Unscrambler
             {
                 Features =
                 {
-                    new HideCallsRemover(), new EmptyTypeReplace(), new CalliReplace(), new MathReplace(),
-                    new DoubleParseReplace(), new LocalToFieldReplace(),
+                    new HideCallsRemover(), new NopRemover(), new CalliReplace(), new LocalToFieldReplace(),
+                    new MathReplace(), new EmptyTypeReplace(),
+                    new DoubleParseReplace(),
                     new SizeOfReplace(), new NopRemover(), new ConvertToIntReplace()
                 }
             },

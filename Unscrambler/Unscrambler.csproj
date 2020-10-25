@@ -32,22 +32,6 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
-        <Reference Include="AsmResolver, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\AsmResolver.4.0.0\lib\netstandard2.0\AsmResolver.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="AsmResolver.DotNet, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\AsmResolver.DotNet.4.0.0\lib\netstandard2.0\AsmResolver.DotNet.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="AsmResolver.PE, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\AsmResolver.PE.4.0.0\lib\netstandard2.0\AsmResolver.PE.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
-        <Reference Include="AsmResolver.PE.File, Version=4.0.0.0, Culture=neutral, PublicKeyToken=null">
-          <HintPath>..\packages\AsmResolver.PE.File.4.0.0\lib\netstandard2.0\AsmResolver.PE.File.dll</HintPath>
-          <Private>True</Private>
-        </Reference>
         <Reference Include="Colorful.Console, Version=1.2.11.0, Culture=neutral, PublicKeyToken=null">
           <HintPath>..\packages\Colorful.Console.1.2.11\lib\net461\Colorful.Console.dll</HintPath>
           <Private>True</Private>
@@ -78,6 +62,24 @@
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\AsmResolver\src\AsmResolver.DotNet\AsmResolver.DotNet.csproj">
+        <Project>{5c64cbc5-8576-4da4-b721-ea96889e8843}</Project>
+        <Name>AsmResolver.DotNet</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\AsmResolver\src\AsmResolver.PE.File\AsmResolver.PE.File.csproj">
+        <Project>{477f8d2a-07e6-4b15-8381-773729027677}</Project>
+        <Name>AsmResolver.PE.File</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\AsmResolver\src\AsmResolver.PE\AsmResolver.PE.csproj">
+        <Project>{a9a92989-9161-4dfa-ae0c-80b9556800c5}</Project>
+        <Name>AsmResolver.PE</Name>
+      </ProjectReference>
+      <ProjectReference Include="..\AsmResolver\src\AsmResolver\AsmResolver.csproj">
+        <Project>{e238e330-02e4-4d09-964f-c33c93c609ec}</Project>
+        <Name>AsmResolver</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
