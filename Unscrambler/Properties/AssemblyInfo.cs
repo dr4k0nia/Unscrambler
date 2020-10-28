@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle( "Unscrambler" )]
-[assembly: AssemblyDescription( "" )]
+[assembly: AssemblyDescription( "Universal unpacker for a variety of ConuserEx mods" )]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "" )]
+[assembly: AssemblyCompany( "https://github.com/dr4k0nia/Unscrambler" )]
 [assembly: AssemblyProduct( "Unscrambler" )]
-[assembly: AssemblyCopyright( "Copyright ©  2020" )]
+[assembly: AssemblyCopyright( "Copyright © drakonia 2020" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 

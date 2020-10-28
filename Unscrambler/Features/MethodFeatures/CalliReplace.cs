@@ -15,7 +15,8 @@ namespace Unscrambler.Features.MethodFeatures
             {
                 if ( instr[i].OpCode != CilOpCodes.Ldftn || instr[i + 1].OpCode != CilOpCodes.Calli )
                     continue;
-
+                
+                // Change ldftn to call and remove the calli opcode
                 instr[i].OpCode = CilOpCodes.Call;
                 instr.RemoveAt( i + 1 );
                 i--;

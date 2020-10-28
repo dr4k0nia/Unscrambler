@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AsmResolver.DotNet;
 using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.PE.DotNet.Cil;
@@ -23,7 +24,7 @@ namespace Unscrambler.Features.MethodFeatures
 
                 foreach ( var field in type.Fields )
                 {
-                    // This assumes that the fields have no default value (which the forks ive checked didnt have)
+                    // This assumes that the fields have no default value (which the forks Ive checked didnt have)
                     if ( !field.IsStatic || field.IsPrivate || field.HasDefault )
                         continue;
                     FieldsInModule.Add( field );

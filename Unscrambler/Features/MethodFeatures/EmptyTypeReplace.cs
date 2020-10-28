@@ -19,12 +19,9 @@ namespace Unscrambler.Features.MethodFeatures
                      instr[i].Operand.ToString() != "System.Type[] System.Type::EmptyTypes" ) 
                     continue;
 
-                instr[i].OpCode = CilOpCodes.Nop;
-                instr[i + 1].OpCode = CilOpCodes.Nop;
-
-                // Nop any following calculation OpCodes
-                if ( Utils.CalculationOpCodes.Contains( instr[i + 2].OpCode ) )
-                    instr[i + 2].OpCode = CilOpCodes.Nop;
+                instr[i].OpCode = CilOpCodes.Ldc_I4_0;
+                instr.RemoveAt( i + 1 );
+                i--;
 
                 _count++;
             }
