@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using AsmResolver.DotNet;
+using AsmResolver.DotNet.Code.Cil;
+using AsmResolver.DotNet.Signatures;
 using AsmResolver.PE.DotNet.Cil;
 
 namespace Unscrambler.Features.MethodFeatures
@@ -7,36 +11,47 @@ namespace Unscrambler.Features.MethodFeatures
     public class DoubleParseReplace : IMethodFeature
     {
         private int _count;
+        
+        private static readonly List<CilInstruction> InstructionsToRemove = new List<CilInstruction>();
 
         public void Process( MethodDefinition method )
         {
             var instr = method.CilMethodBody.Instructions;
+            instr.ExpandMacros();
             for ( int i = 0; i < instr.Count; i++ )
             {
-                // Search for Call opcode
-                if ( instr[i].OpCode != CilOpCodes.Call ||
-                     instr[i + 1].OpCode != CilOpCodes.Conv_I4 ||
-                     instr[i - 1].OpCode != CilOpCodes.Ldstr ) continue;
+                if ( !( instr[i].Operand is MemberReference memberRef ) ||
+                     memberRef.DeclaringType.FullName != "System.Double" )
+                    continue;
 
-                if ( instr[i].Operand.ToString() != "System.Double System.Double::Parse(String)" ) continue;
-
-                // Get string used by original Double.Parse()
-                string input = (string) instr[i - 1].Operand;
-                // Solve Double.Parse()
-                double.TryParse( input, out double result );
-
-                // Change Call to Ldc_I4 and set result of Double.Parse() as operand
-                instr[i].OpCode = CilOpCodes.Ldc_I4;
-                instr[i].Operand = (int) result;
-
-                // Nop Ldstr and Conv_I4
-                instr[i - 1].OpCode = CilOpCodes.Nop;
-                instr[i + 1].OpCode = CilOpCodes.Nop;
+                var methodBase =
+                    typeof(double).Assembly.ManifestModule.ResolveMethod( memberRef.Resolve().MetadataToken
+                        .ToInt32() );
                 
-                //Utils.RemoveInstructionRange( instr, new []{1, -1}, ref i );
+                var arguments = GetArguments( methodBase, instr, i );
 
+                if ( arguments.Any(o => o is null))
+                {
+                    InstructionsToRemove.Clear();
+                    continue;
+                }
+                
+                var result = methodBase.Invoke( null, arguments );
+                
+                var opcode = Utils.GetOpCode( method.Module.CorLibTypeFactory.FromType(
+                    ( (MethodSignature) memberRef.Signature )
+                    .ReturnType ).ElementType );
+                instr[i].OpCode = opcode;
+                instr[i].Operand = result;
                 _count++;
+                
+                foreach ( var instruction in InstructionsToRemove )
+                {
+                    instruction.OpCode = CilOpCodes.Nop;
+                }
+                InstructionsToRemove.Clear();
             }
+            instr.OptimizeMacros();
         }
 
         public IEnumerable<Summary> GetSummary()
@@ -44,5 +59,29 @@ namespace Unscrambler.Features.MethodFeatures
             if ( _count > 0 )
                 yield return new Summary( $"Replaced {_count} Double.Parse() implementations", Logger.LogType.Success );
         }
+        
+        private static object[] GetArguments( MethodBase methodBase, CilInstructionCollection instr, int i )
+        {
+            var arguments = new object[methodBase.GetParameters().Length];
+            for ( int j = 0; j < arguments.Length; j++ )
+            {
+                switch ( instr[i - j - 1].OpCode.OperandType )
+                {
+                    case CilOperandType.InlineMethod:
+                    case CilOperandType.InlineI:
+                    case CilOperandType.InlineString:
+                        arguments[arguments.Length - j - 1] = instr[i - j - 1].Operand;
+                        InstructionsToRemove.Add( instr[i - j - 1]  );
+                        break;
+                    default:
+                        arguments[arguments.Length - j - 1] = null;
+                        break;
+                }
+            }
+
+            return arguments;
+        }
+        
+        
     }
 }

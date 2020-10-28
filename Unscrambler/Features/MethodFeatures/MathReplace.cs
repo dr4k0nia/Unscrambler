@@ -39,7 +39,7 @@ namespace Unscrambler.Features.MethodFeatures
                 }
 
                 var result = mathMethod.Invoke( null, arguments );
-                var opcode = GetOpCode( method.Module.CorLibTypeFactory.FromType(
+                var opcode = Utils.GetOpCode( method.Module.CorLibTypeFactory.FromType(
                     ( (MethodSignature) memberRef.Signature )
                     .ReturnType ).ElementType );
                 instr[i].OpCode = opcode;
@@ -83,33 +83,6 @@ namespace Unscrambler.Features.MethodFeatures
             }
 
             return arguments;
-        }
-
-        // Ported to AsmResolver, original taken from
-        // https://github.com/wwh1004/ConfuserExTools/blob/master/ConstantKiller/ConstantKillerImpl.cs#L110
-        private static CilOpCode GetOpCode( ElementType returnType )
-        {
-            switch ( returnType )
-            {
-                case ElementType.Boolean:
-                case ElementType.Char:
-                case ElementType.I1:
-                case ElementType.U1:
-                case ElementType.I2:
-                case ElementType.U2:
-                case ElementType.I4:
-                case ElementType.U4:
-                    return CilOpCodes.Ldc_I4;
-                case ElementType.I8:
-                case ElementType.U8:
-                    return CilOpCodes.Ldc_I8;
-                case ElementType.R4:
-                    return CilOpCodes.Ldc_R4;
-                case ElementType.R8:
-                    return CilOpCodes.Ldc_R8;
-                default:
-                    throw new InvalidOperationException();
-            }
         }
     }
 }
