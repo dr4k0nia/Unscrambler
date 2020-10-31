@@ -15,13 +15,14 @@ namespace Unscrambler
             {
                 Features =
                 {
-                    new HideCallsRemover(), new NopRemover(), new CalliReplace(), new LocalToFieldReplace(),
+                    new HideCallsRemover(), new NopRemover(), new CalliReplace(),
                     new MathReplace(), new EmptyTypeReplace(),
                     new DoubleParseReplace(),
                     new SizeOfReplace(), new NopRemover(), new ConvertToIntReplace()
                 }
             },
-            new InterfaceLoopRemover()
+            new InterfaceLoopRemover(),
+            new LocalsToFieldRemover(),
         };
 
         public static void Main( string[] args )

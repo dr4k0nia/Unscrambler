@@ -46,12 +46,12 @@
     <ItemGroup>
         <Compile Include="Features\IFeature.cs" />
         <Compile Include="Features\InterfaceLoopRemover.cs" />
+        <Compile Include="Features\LocalsToFieldRemover.cs" />
         <Compile Include="Features\MethodFeatures\CalliReplace.cs" />
         <Compile Include="Features\MethodFeatures\ConvertToIntReplace.cs" />
         <Compile Include="Features\MethodFeatures\DoubleParseReplace.cs" />
         <Compile Include="Features\MethodFeatures\EmptyTypeReplace.cs" />
         <Compile Include="Features\MethodFeatures\HideCallsRemover.cs" />
-        <Compile Include="Features\MethodFeatures\LocalToFieldReplace.cs" />
         <Compile Include="Features\MethodFeatures\MathReplace.cs" />
         <Compile Include="Features\MethodFeatures\NopRemover.cs" />
         <Compile Include="Features\MethodFeatures\SizeOfReplace.cs" />
