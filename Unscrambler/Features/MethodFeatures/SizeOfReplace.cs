@@ -18,7 +18,7 @@ namespace Unscrambler.Features.MethodFeatures
             for ( int i = 0; i < instr.Count; i++ )
             {
                 // Search for Sizeof opcode
-                if ( instr[i].OpCode != CilOpCodes.Sizeof ) 
+                if ( instr[i].OpCode != CilOpCodes.Sizeof )
                     continue;
 
                 var op = (ITypeDefOrRef) instr[i].Operand;

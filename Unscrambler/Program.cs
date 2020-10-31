@@ -28,7 +28,7 @@ namespace Unscrambler
         {
             Console.WriteAscii( "Unscrambler" );
             Console.WriteLine( "Unscrambler v1.0 by drakonia | github.com/dr4k0nia \n", Color.Gold );
-            if ( args.Length < 1 )
+            if ( args.Length == 0 )
             {
                 Console.WriteLine( "Usage: unscrambler.exe <file>" );
                 Console.ReadKey();

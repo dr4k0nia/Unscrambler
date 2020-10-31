@@ -37,11 +37,8 @@ namespace Unscrambler.Features.MethodFeatures
                 }
                 
                 var result = methodBase.Invoke( null, arguments );
-                
-                var opcode = Utils.GetOpCode( method.Module.CorLibTypeFactory.FromType(
-                    ( (MethodSignature) memberRef.Signature )
-                    .ReturnType ).ElementType );
-                instr[i].OpCode = opcode;
+
+                instr[i].OpCode = CilOpCodes.Ldc_R8;
                 instr[i].Operand = result;
                 _count++;
                 

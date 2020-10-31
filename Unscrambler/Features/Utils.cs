@@ -42,7 +42,7 @@ namespace Unscrambler.Features
         public static void RemoveInstructionRange( CilInstructionCollection instr, IEnumerable<int> removalIndexes,
             ref int index )
         {
-            foreach ( var removalIndex in removalIndexes )
+            foreach ( int removalIndex in removalIndexes )
             {
                 instr.RemoveAt( index + removalIndex );
                 index--;

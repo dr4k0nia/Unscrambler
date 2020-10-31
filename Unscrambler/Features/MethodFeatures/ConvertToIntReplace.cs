@@ -9,6 +9,7 @@ namespace Unscrambler.Features.MethodFeatures
     {
         private int _count;
 
+        //This is a primitive implementation, and subject to change.
         public void Process( MethodDefinition method )
         {
             var instr = method.CilMethodBody.Instructions;
@@ -16,7 +17,7 @@ namespace Unscrambler.Features.MethodFeatures
             {
                 // Search for Call opcode
                 if ( instr[i].OpCode != CilOpCodes.Call ) continue;
-                if ( instr[i].Operand.ToString() != "System.Int32 System.Convert::ToInt32(Double)" ) 
+                if ( instr[i].Operand.ToString() != "System.Int32 System.Convert::ToInt32(Double)" )
                     continue;
 
                 // Solve implementations like this Convert.ToInt32(-28.0 - -95.0)
@@ -50,13 +51,14 @@ namespace Unscrambler.Features.MethodFeatures
                 yield return new Summary( $"Replaced {_count} Convert.ToInt32() implementations",
                     Logger.LogType.Success );
         }
-        
-        
+
+
         private static bool Solve( MethodDefinition method, int i )
         {
             var instr = method.CilMethodBody.Instructions;
             double a = (double) instr[i - 3].Operand;
             double b = (double) instr[i - 2].Operand;
+
             if ( instr[i - 1].OpCode == CilOpCodes.Add )
             {
                 instr[i].OpCode = CilOpCodes.Ldc_I4;

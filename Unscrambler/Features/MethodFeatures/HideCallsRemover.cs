@@ -20,8 +20,9 @@ namespace Unscrambler.Features.MethodFeatures
             {
                 if ( instr[i].OpCode != CilOpCodes.Calli || instr[i + 1].OpCode != CilOpCodes.Sizeof ) 
                     continue;
+                
                 //Check if instruction operand is null
-                if ( instr[i].Operand.GetHashCode() != -1 ) 
+                if ( instr[i].Operand is null ) 
                     continue;
 
                 // Search for a finally handler
