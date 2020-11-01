@@ -53,6 +53,8 @@ namespace Unscrambler
 
             string filepath = inputPath.Insert( inputPath.Length - 4, "_unscrambled" );
             module.Write( filepath );
+            
+            Logger.Log( $"Saved unscrambled file at: {filepath}", Logger.LogType.Success );
             Console.ReadKey();
         }
 
