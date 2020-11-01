@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.IO;
 using System.Linq;
 using AsmResolver.DotNet;
 using Unscrambler.Features;
@@ -37,6 +38,13 @@ namespace Unscrambler
             }
 
             string inputPath = args[0];
+            if ( !File.Exists( inputPath ) )
+            {
+                Logger.Log( $"Unable to find file: {inputPath}", Logger.LogType.Error );
+                Console.ReadKey();
+                return;
+            }
+
             var module = ModuleDefinition.FromFile( inputPath );
 
             Process( module );

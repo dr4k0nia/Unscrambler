@@ -6,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.DotNet.Signatures;
-using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 
 namespace Unscrambler.Features.MethodFeatures
 {
@@ -14,7 +13,7 @@ namespace Unscrambler.Features.MethodFeatures
     {
         private int _count;
         
-        private static readonly List<CilInstruction> InstructionsToRemove = new List<CilInstruction>();
+        private readonly List<CilInstruction> _instructionsToRemove = new List<CilInstruction>();
         
         // Thanks to Anonymoose for helping out
         public void Process( MethodDefinition method )
@@ -24,7 +23,7 @@ namespace Unscrambler.Features.MethodFeatures
             for ( int i = 0; i < instr.Count; i++ )
             {
                 if ( !( instr[i].Operand is MemberReference memberRef ) ||
-                     memberRef.DeclaringType.FullName != "System.Math" )
+                     !memberRef.DeclaringType.IsTypeOf( "System", "Math" ) )
                     continue;
                 var mathMethod =
                     typeof(Math).Assembly.ManifestModule.ResolveMethod( memberRef.Resolve().MetadataToken
@@ -34,7 +33,7 @@ namespace Unscrambler.Features.MethodFeatures
 
                 if ( arguments.Any(o => o is null))
                 {
-                    InstructionsToRemove.Clear();
+                    _instructionsToRemove.Clear();
                     continue;
                 }
 
@@ -46,11 +45,11 @@ namespace Unscrambler.Features.MethodFeatures
                 instr[i].Operand = result;
                 _count++;
                 
-                foreach ( var instruction in InstructionsToRemove )
+                foreach ( var instruction in _instructionsToRemove )
                 {
                     instruction.OpCode = CilOpCodes.Nop;
                 }
-                InstructionsToRemove.Clear();
+                _instructionsToRemove.Clear();
             }
 
             method.CilMethodBody.Instructions.OptimizeMacros();
@@ -62,7 +61,7 @@ namespace Unscrambler.Features.MethodFeatures
                 yield return new Summary( $"Replaced {_count} Math implementations", Logger.LogType.Success );
         }
 
-        private static object[] GetArguments( MethodBase mathMethod, CilInstructionCollection instr, int i )
+        private object[] GetArguments( MethodBase mathMethod, CilInstructionCollection instr, int i )
         {
             var arguments = new object[mathMethod.GetParameters().Length];
             for ( int j = 0; j < arguments.Length; j++ )
@@ -74,7 +73,7 @@ namespace Unscrambler.Features.MethodFeatures
                     case CilOperandType.InlineR:
                     case CilOperandType.ShortInlineR:
                         arguments[arguments.Length - j - 1] = instr[i - j - 1].Operand;
-                        InstructionsToRemove.Add( instr[i - j - 1]  );
+                        _instructionsToRemove.Add( instr[i - j - 1]  );
                         break;
                     default:
                         arguments[arguments.Length - j - 1] = null;

@@ -12,7 +12,7 @@ namespace Unscrambler.Features.MethodFeatures
     {
         private int _count;
         
-        private static readonly List<CilInstruction> InstructionsToRemove = new List<CilInstruction>();
+        private readonly List<CilInstruction> InstructionsToRemove = new List<CilInstruction>();
 
         public void Process( MethodDefinition method )
         {
@@ -57,7 +57,7 @@ namespace Unscrambler.Features.MethodFeatures
                 yield return new Summary( $"Replaced {_count} Double.Parse() implementations", Logger.LogType.Success );
         }
         
-        private static object[] GetArguments( MethodBase methodBase, CilInstructionCollection instr, int i )
+        private object[] GetArguments( MethodBase methodBase, CilInstructionCollection instr, int i )
         {
             var arguments = new object[methodBase.GetParameters().Length];
             for ( int j = 0; j < arguments.Length; j++ )
