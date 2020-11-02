@@ -22,6 +22,6 @@ Either Drag&Drop your file onto unscrambler or use command line arguments like s
        Unscrambler.exe <file>
 
 ## Credits / Thanks to
--  [AnonymooseRE](https:github.com/anonymoosere) For helping out with Unscrambler and answering a lot of my questions
+-  [AnonymooseRE](https://github.com/anonymoosere) For helping out with Unscrambler and answering a lot of my questions
 -  [Washi](https://github.com/Washi1337/AsmResolver) For AsmResolver and answering my questions
 - A ton of public ConfuserEx forks used as reference material
