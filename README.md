@@ -5,7 +5,7 @@ Dealing with simple modded protections like sizeof() mutations can be annoying. 
 
 ## Features
 Unscrambler can remove/fix the following:
-- System.Math Mutations
+- System.Math Mutations*
 - Double.Parse() Mutations
 - Sizeof Mutations
 - EmptyType Mutations
@@ -13,6 +13,8 @@ Unscrambler can remove/fix the following:
 - HideCalls
 - Anti de4dot (using interface loop)
 - Locals To Fields
+
+> * Due to the use of reflection this can fail if your target apps has a different framework, a fix is in the works.
 
 ## Usage
 Either Drag&Drop your file onto unscrambler or use command line arguments like shown below:
