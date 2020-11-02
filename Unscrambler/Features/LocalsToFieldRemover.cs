@@ -26,7 +26,8 @@ namespace Unscrambler.Features
                     // This assumes that the fields have no default value (which the forks Ive checked didnt have)
                     if ( !field.IsStatic || field.IsPrivate || field.HasDefault )
                         continue;
-                    FieldsInModule.Add( field );
+                    
+                    CheckUsage( field, type.Module );
                 }
             }
 
@@ -74,7 +75,7 @@ namespace Unscrambler.Features
                 yield return new Summary( $"Removed {_count} Local to Field implementations", Logger.LogType.Success );
         }
 
-        private static CilOpCode GetOpCode( CilCode opcode )
+        private CilOpCode GetOpCode( CilCode opcode )
         {
             switch ( opcode )
             {
@@ -84,9 +85,25 @@ namespace Unscrambler.Features
                     return CilOpCodes.Ldloc;
                 case CilCode.Ldsflda:
                     return CilOpCodes.Ldloca;
+                default:
+                    return CilOpCodes.Nop;
             }
-
-            return CilOpCodes.Nop;
+        }
+        
+        private void CheckUsage(FieldDefinition field, ModuleDefinition module)
+        {
+            int match = 0;
+            foreach ( var type in module.GetAllTypes())
+            {
+                foreach ( var method in type.Methods.Where( m => m.CilMethodBody != null ) )
+                {
+                    if ( method.CilMethodBody.Instructions.Any( i =>
+                        i.Operand is FieldDefinition matchedField && matchedField == field ) )
+                        match++;
+                }
+            }
+            if ( match == 1 )
+                FieldsInModule.Add( field );
         }
     }
 }
