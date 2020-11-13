@@ -1,4 +1,0 @@
-[submodule "AsmResolver"]
-	path = AsmResolver
-	url = https://github.com/Washi1337/AsmResolver.git
-	branch = development
