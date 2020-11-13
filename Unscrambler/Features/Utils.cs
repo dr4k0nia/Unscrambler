@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AsmResolver.DotNet;
-using AsmResolver.DotNet.Code.Cil;
 using AsmResolver.PE.DotNet.Cil;
 using AsmResolver.PE.DotNet.Metadata.Tables.Rows;
 
@@ -16,37 +14,22 @@ namespace Unscrambler.Features
         // https://github.com/wwh1004/ConfuserExTools/blob/master/ConstantKiller/ConstantKillerImpl.cs#L110
         public static CilOpCode GetOpCode( ElementType returnType )
         {
-            switch ( returnType )
+            return returnType switch
             {
-                case ElementType.Boolean:
-                case ElementType.Char:
-                case ElementType.I1:
-                case ElementType.U1:
-                case ElementType.I2:
-                case ElementType.U2:
-                case ElementType.I4:
-                case ElementType.U4:
-                    return CilOpCodes.Ldc_I4;
-                case ElementType.I8:
-                case ElementType.U8:
-                    return CilOpCodes.Ldc_I8;
-                case ElementType.R4:
-                    return CilOpCodes.Ldc_R4;
-                case ElementType.R8:
-                    return CilOpCodes.Ldc_R8;
-                default:
-                    throw new InvalidOperationException();
-            }
-        }
-
-        public static void RemoveInstructionRange( CilInstructionCollection instr, IEnumerable<int> removalIndexes,
-            ref int index )
-        {
-            foreach ( int removalIndex in removalIndexes )
-            {
-                instr.RemoveAt( index + removalIndex );
-                index--;
-            }
+                ElementType.Boolean => CilOpCodes.Ldc_I4,
+                ElementType.Char => CilOpCodes.Ldc_I4,
+                ElementType.I1 => CilOpCodes.Ldc_I4,
+                ElementType.U1 => CilOpCodes.Ldc_I4,
+                ElementType.I2 => CilOpCodes.Ldc_I4,
+                ElementType.U2 => CilOpCodes.Ldc_I4,
+                ElementType.I4 => CilOpCodes.Ldc_I4,
+                ElementType.U4 => CilOpCodes.Ldc_I4,
+                ElementType.I8 => CilOpCodes.Ldc_I8,
+                ElementType.U8 => CilOpCodes.Ldc_I8,
+                ElementType.R4 => CilOpCodes.Ldc_R4,
+                ElementType.R8 => CilOpCodes.Ldc_R8,
+                _ => throw new InvalidOperationException()
+            };
         }
     }
 }

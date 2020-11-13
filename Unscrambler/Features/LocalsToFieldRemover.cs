@@ -77,17 +77,13 @@ namespace Unscrambler.Features
 
         private CilOpCode GetOpCode( CilCode opcode )
         {
-            switch ( opcode )
+            return opcode switch
             {
-                case CilCode.Stsfld:
-                    return CilOpCodes.Stloc;
-                case CilCode.Ldsfld:
-                    return CilOpCodes.Ldloc;
-                case CilCode.Ldsflda:
-                    return CilOpCodes.Ldloca;
-                default:
-                    return CilOpCodes.Nop;
-            }
+                CilCode.Stsfld => CilOpCodes.Stloc,
+                CilCode.Ldsfld => CilOpCodes.Ldloc,
+                CilCode.Ldsflda => CilOpCodes.Ldloca,
+                _ => CilOpCodes.Nop
+            };
         }
         
         private void CheckUsage(FieldDefinition field, ModuleDefinition module)

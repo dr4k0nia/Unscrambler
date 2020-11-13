@@ -21,7 +21,7 @@ namespace Unscrambler.Features.MethodFeatures
             for ( int i = 0; i < instr.Count; i++ )
             {
                 if ( !( instr[i].Operand is MemberReference memberRef ) ||
-                     memberRef.DeclaringType.FullName != "System.Double" )
+                     !memberRef.DeclaringType.IsTypeOf( "System", "Double" ) )
                     continue;
 
                 var methodBase =

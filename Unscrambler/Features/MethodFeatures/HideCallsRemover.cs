@@ -36,7 +36,8 @@ namespace Unscrambler.Features.MethodFeatures
                     _count++;
                 }
 
-                Utils.RemoveInstructionRange( instr, new[] {0, 1}, ref i );
+                instr[i].OpCode = CilOpCodes.Nop;
+                instr[i + 1].OpCode = CilOpCodes.Nop;
             }
         }
 

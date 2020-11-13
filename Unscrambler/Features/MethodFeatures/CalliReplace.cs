@@ -18,8 +18,7 @@ namespace Unscrambler.Features.MethodFeatures
                 
                 // Change ldftn to call and remove the calli opcode
                 instr[i].OpCode = CilOpCodes.Call;
-                instr.RemoveAt( i + 1 );
-                i--;
+                instr[i].OpCode = CilOpCodes.Nop;
 
                 _count++;
             }
